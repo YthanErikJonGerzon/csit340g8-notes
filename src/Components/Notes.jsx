@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import NoteCard from "./NoteCard.jsx";
 
 const startingNotes = [
@@ -52,12 +52,16 @@ function Notes() {
     setForm({ title: "", body: "" });
     titleRef.current.focus()
   }
-  function handleDelete(id) {
+    const handleDelete = useCallback((id) => {
     setNotes(notes.filter((note) => note.id !== id));
-  }
-  const shownNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(search.toLowerCase()),
-  );
+  }, [notes])
+ 
+  const shownNotes = useMemo(() => {
+    console.log('filtering')
+        return notes.filter((note) =>
+      note.title.toLowerCase().includes(search.toLowerCase())
+    )
+  }, [notes, search])
   return (
     <div className="grid min-h-screen grid-cols-[420px_1fr]">
       <aside className="sticky top-0 flex h-screen flex-col gap-5 bg-white px-8 py-9 shadow-[0_2px_4px_0_rgba(0,0,0,0.2),0_25px_50px_0_rgba(0,0,0,0.1)]">
