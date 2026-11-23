@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import NoteCard from "./NoteCard.jsx";
 
 const startingNotes = [
@@ -18,31 +18,29 @@ function Notes() {
     const saved = localStorage.getItem("notes");
     return saved ? JSON.parse(saved) : startingNotes;
   });
-  
+
   const [form, setForm] = useState(() => {
-  const savedDraft = localStorage.getItem("draft");
-  return savedDraft ? JSON.parse(savedDraft) : { title: "", body: "" };
-});
+    const savedDraft = localStorage.getItem("draft");
+    return savedDraft ? JSON.parse(savedDraft) : { title: "", body: "" };
+  });
   const [search, setSearch] = useState("");
-  const titleRef = useRef(null)
+  const titleRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
 
-
   useEffect(() => {
     const id = setTimeout(() => {
-      localStorage.setItem('draft', JSON.stringify(form))
-      console.log('draft saved:', form.title)
-    }, 1000)
-     return () => clearTimeout(id)
-  }, [form])
+      localStorage.setItem("draft", JSON.stringify(form));
+      console.log("draft saved:", form.title);
+    }, 1000);
+    return () => clearTimeout(id);
+  }, [form]);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
-
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -54,18 +52,22 @@ function Notes() {
     const newNote = { id: crypto.randomUUID(), title, body };
     setNotes([...notes, newNote]);
     setForm({ title: "", body: "" });
-    titleRef.current.focus()
+    localStorage.removeItem("draft");
+    titleRef.current.focus();
   }
-    const handleDelete = useCallback((id) => {
-    setNotes(notes.filter((note) => note.id !== id));
-  }, [notes])
- 
+  const handleDelete = useCallback(
+    (id) => {
+      setNotes(notes.filter((note) => note.id !== id));
+    },
+    [notes],
+  );
+
   const shownNotes = useMemo(() => {
-    console.log('filtering')
-        return notes.filter((note) =>
-      note.title.toLowerCase().includes(search.toLowerCase())
-    )
-  }, [notes, search])
+    console.log("filtering");
+    return notes.filter((note) =>
+      note.title.toLowerCase().includes(search.toLowerCase()),
+    );
+  }, [notes, search]);
   return (
     <div className="grid min-h-screen grid-cols-[420px_1fr]">
       <aside className="sticky top-0 flex h-screen flex-col gap-5 bg-white px-8 py-9 shadow-[0_2px_4px_0_rgba(0,0,0,0.2),0_25px_50px_0_rgba(0,0,0,0.1)]">

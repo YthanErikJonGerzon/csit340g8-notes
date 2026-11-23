@@ -12,7 +12,7 @@ useEffect(() => {
   localStorage.setItem("largeText", largeText);
 }, [largeText]);
   return (
-  <SettingsContext.Provider value={{ largeText, setLargeText }}>
+   <SettingsContext.Provider value={{ largeText, setLargeText }}>
       <div className="bg-[#f5f5f5] font-light text-[#111]">
         <Notes />
         <Info name="Juan Dela Cruz" />
